@@ -18,7 +18,7 @@ class LearningAgent(Agent):
         self.steps = 0
         self.acc_steps = 0
 
-        self.alpha = 0.4
+        self.alpha = 0.5
         self.gamma = 0.4
         #self.epsilon = 1
         self.epsilon = 1/self.counter
