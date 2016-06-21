@@ -25,16 +25,36 @@ I choose states as next waypoint, light, status of oncoming agents and status of
 ## What changes do you notice in the agent’s behavior?
 
 Qlearning has given the agent more information to learnso that it can learn from the traffic lights and surrounding utility Q values so that I can be easier for it to reach the destination before the deadline.
-After several trials, the smartcab can follow the rules set in the states and know what it should act to earn higher rewards. Initially I set alpha as 0.5, gamma as 0.9, epsilon =1, and number of trials as 100.  The result shows that the smartcab can reach the destination for 67 times in total number of 100 trials, representing a success rate of 67%. Among total number of 1879 steps it experienced in its 100 trials, the smartcab had recorded 65 negative rewards (penalties), accounting for 3.4% of total.
+
+After several trials, the smartcab can follow the rules set in the states and know what it should act to earn higher rewards. Initially I set alpha as 0.5, gamma as 0.9, epsilon = 1, and number of trials as 100.  The result shows that the smartcab can reach the destination for 33 times in total number of 100 trials, representing a success rate of 33%. Among total number of 2455 steps it experienced in its 100 trials, the smartcab had recorded 17 negative rewards (penalties), accounting for 0.69% of total.
 
 ## Report what changes you made to your basic implementation of Q-Learning to achieve the final version of the agent. How well does it perform?
-*Epsilon \& Gamma*
-I initially set gamma as 0.9. I can decrease the gamma so that the smartcab agent gets more penalised when it takes more time to reach the destination.
-Initially we set epsilon as fixed number 1, however, given the exploration diminishes over time, and the policy used asymptotically becomes greedy and optimal. It can be better to set epsilon as 1/k  (k = number of trials) as number of trial grows.
+**Discount Factor: gamma**
+The discount factor gamma determines the importance of future rewards. I initially set gamma as 0.9. however it result in a lower success rate, meaning that the algorithm does not converages as quickly as we expected. I can decrease the gamma so that the smartcab agent gets more penalised when it takes more time to reach the destination (short-sighted). A lower gamma is required to acclerate the algorithm and yield a higher success rate, 98%-99% (shown in the table below).
 
-Thus, I tried a new set of parameters: alpha at 0.5, gamma at 0.4, epsilon =1/k, and number of trials as 100. The change results in a much higher success rate  - 98% and the negative penalised rate at about 1.7% among 1403 moves (note that the number of moves also gets less compared to the previous experiment). These two adjustment should result in the algorithm to find its optimal policy more efficient than before
+**Learning Rate:alpha**
+For leanring rate, the learning rate determines to what extent the newly acquired information will override the old information. A lower learning rate will make the agent not learn less, while a factor of 1 would make the agent consider only the most recent information. In fully deterministic environments, a learning rate of 1 is optimal. When the problem is stochastic, the algorithm still converges under some technical conditions on the learning rate, that require it to decrease to zero. The basic conditions are that the sum of the learning rates goes to infinity (so that any value could be reached) and that the sum of the squares of
+the learning rates is finite (which is required to show that the convergence is with probability one). In this case, a lower leanrning rate like 0.1 (table below) results in a lower success rate given the agent is not leanring quickly enough. A highly leanring rate like 0.9 should be ok. We adopts 0.9 constant learning rate in the experiment below.
 
-*Initial Q value*
+**Epsilon**
+Initially we set epsilon as fixed number 1, however, given the exploration diminishes over time, and the policy used asymptotically becomes greedy and optimal. It should be better to set epsilon as 1/k  (k = number of trials) as number of trial grows. Thus, I tried a new set of parameters: alpha at 0.9, gamma at 0.4, epsilon =1/k, and number of trials as 100. The change results in a much higher success rate  - 98% and the negative penalised rate at about 1.7% among 1403 moves (note that the number of moves also gets less compared to the previous experiment). These two adjustment should result in the algorithm to find its optimal policy more efficient than before.
+
+| Alpha  | Gamma  | epsilon  | Success Rate  |  Explored moves |  Penalised moves  | Penalised rate  |
+|:-:|:-:|:-:|:-:|:-:| :-:| :-:|
+|  0.5  | 0.9  |  1 | 33%  | 2455  | 17  | 0.69% |
+|  0.5 |  0.4 | 1  |  98% |  1218 |  14 | 1.15% |
+|  0.5 | 0.1  | 1  | 98%  | 1403  | 18 | 1.28% |
+|    |   |    |  |    |  |  |
+|  0.1 | 0.4  | 1  | 87%  | 1554  | 77 | 4.95% |
+|  0.5 | 0.4  | 1  |93%  | 1494  | 38 | 2.54% |
+|  0.9 | 0.4  | 1  |96%  | 1397  | 30 | 2.15% |
+|    |   |    |  |    |  |  |
+|  0.9 | 0.4  | 1  |96%  | 1340 | 26 | 1.94% |
+|  0.9 | 0.4  | 1/k  |99%  | 1445  | 12 | 0.83% |
+
+
+
+**Initial Q value**
 Initially I set Q initial condition at 0. However, in about 100 trials, the algorithm converges poorly and only recorded less than 20 succeeded trials to the destination.
 Initial action values can also be used as a simple way of encouraging exploration, a higher or a more optimistic initial value should encourage the algorithm explore all actions quickly as in a first few trials. This is because every action the agent explored initially should has a lower Q value compared to the initial Q value.
 I tried a few large number such as 5, it converages quickly and achieved higher success rate compared to 0 initial condition.
