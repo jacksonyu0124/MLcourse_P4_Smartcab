@@ -28,10 +28,25 @@ Qlearning has given the agent more information to learnso that it can learn from
 After several trials, the smartcab can follow the rules set in the states and know what it should act to earn higher rewards. Initially I set alpha as 0.5, gamma as 0.9, epsilon =1, and number of trials as 100.  The result shows that the smartcab can reach the destination for 67 times in total number of 100 trials, representing a success rate of 67%. Among total number of 1879 steps it experienced in its 100 trials, the smartcab had recorded 65 negative rewards (penalties), accounting for 3.4% of total.
 
 ## Report what changes you made to your basic implementation of Q-Learning to achieve the final version of the agent. How well does it perform?
-We initially sets gamma as 0.9. We can decrease the gamma so that the smartcab agent gets more penalised when it takes more time to reach the destination.
+*Epsilon \& Gamma*
+I initially set gamma as 0.9. I can decrease the gamma so that the smartcab agent gets more penalised when it takes more time to reach the destination.
 Initially we set epsilon as fixed number 1, however, given the exploration diminishes over time, and the policy used asymptotically becomes greedy and optimal. It can be better to set epsilon as 1/k  (k = number of trials) as number of trial grows.
 
-Thus, I tried a new set of parameters: alpha at 0.5, gamma at 0.4, epsilon =1/k, and number of trials as 100. The change results in a much higher success rate  - 98% and the negative penalised rate at about 1.7% among 1403 moves (note that the number of moves also gets less compared to the previous experiment).
+Thus, I tried a new set of parameters: alpha at 0.5, gamma at 0.4, epsilon =1/k, and number of trials as 100. The change results in a much higher success rate  - 98% and the negative penalised rate at about 1.7% among 1403 moves (note that the number of moves also gets less compared to the previous experiment). These two adjustment should result in the algorithm to find its optimal policy more efficient than before
+
+*Initial Q value*
+Initially I set Q initial condition at 0. However, in about 100 trials, the algorithm converges poorly and only recorded less than 20 succeeded trials to the destination.
+Initial action values can also be used as a simple way of encouraging exploration, a higher or a more optimistic initial value should encourage the algorithm explore all actions quickly as in a first few trials. This is because every action the agent explored initially should has a lower Q value compared to the initial Q value.
+I tried a few large number such as 5, it converages quickly and achieved higher success rate compared to 0 initial condition.
+
 
 ## Does your agent get close to finding an optimal policy, i.e. reach the destination in the minimum possible time, and not incur any penalties?
-Yes, after adjusting the gamma and epsilon, the algorithm gets faster to find an optimal policy. It only takes the first 1 or 2 trials to reach the destination within 100 trials. Among all the moves it takes in the 100 trials, the penalised moves are mainly occurred in the first few random steps it made.  As the number of steps grows, the smartcab gets learning from previous experience.
+**Performance of the Agent**
+*Penalties*
+Among 24 moves that reported negative rewards, the penalised moves are mainly occurred in the first few random steps it made. By looking at the detailed move of each penalised actions, those negative-reward moves are mainly involved in breaking traffic rules, for example, when light is red, it goes forward, or left. Some other penalities are incurred when there are oncoming cars and the agent doesn't know what to do at first. The negative moves continue to decrease as number of trials increases.
+
+*Rewards*
+The structure of the reward of each trial is normalised for each action move. As each correct action is awarded, without a deadline, the agent tends to go like circles to accumulate poisitive wards with longer distance to the destination. However, once a deadline is set, the agent tends to break the traffic rule (and report much more negative-reward moves) so as to reach the destination. In reality, the reward can be a function of actions and states, or maybe set as *delayed rewards" taking into account the time of its travel or total number of actions it accumulated.
+
+**Conclusion**
+In all, after adjusting the gamma, epsilon and the initial Q-value, the algorithm gets more robust in finding an optimal policy. It only takes the first 1st or 2nd trials to learn and can reach the destination from its 3nd trials within 100 trials. The agent is able to get the target destination on time with low chances of incurring accidents or breaking the rules.
