@@ -18,7 +18,7 @@ class LearningAgent(Agent):
         self.steps = 0
         self.acc_steps = 0
 
-        self.alpha = 0.5
+        self.alpha = 0.9
         self.gamma = 0.4
         #self.epsilon = 1
         self.epsilon = 1/self.counter
@@ -69,6 +69,8 @@ class LearningAgent(Agent):
         reward = self.env.act(self, action)
         if reward < 0:
             self.neg_reward_count += 1
+            print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
+
 
         # TODO: Learn policy based on state, action, reward
         if self.steps:
@@ -82,7 +84,6 @@ class LearningAgent(Agent):
         self.steps += 1
         self.acc_steps += 1
         self.counter +=1
-        print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
 def run():
     """Run the agent for a finite number of trials."""
