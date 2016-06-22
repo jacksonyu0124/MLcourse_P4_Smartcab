@@ -1,6 +1,8 @@
 # Train a Smartcab How to Drive
 
-Reinforcement Learning Project
+Q learning algorithm. 
+
+Agent cars learns how to follow traffic rules and gets rewards/penalised on each moves. 
 
 ## Install
 
