@@ -2,9 +2,9 @@
 
 Q learning algorithm. 
 
-Agent cars learns how to follow traffic rules and gets rewards/penalised on each moves. 
+Agent cab learns how to follow the traffic rules and reach the destination. 
 
-## Install
+# Install
 
 This project requires Python 2.7 with the pygame library installed:
 
